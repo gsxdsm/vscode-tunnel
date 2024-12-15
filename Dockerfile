@@ -30,7 +30,7 @@ RUN curl -sSLf -o /usr/local/bin/kubectl "https://dl.k8s.io/release/v${KUBECTL_V
     chmod +x /usr/local/bin/kubectl
 
 # Download and install VS Code CLI
-ARG VSCODE_CLI_VERSION=1.95.3
+ARG VSCODE_CLI_VERSION=1.96.0
 RUN VSCODE_CLI_URL=$(curl -sSLf "https://update.code.visualstudio.com/api/versions/${VSCODE_CLI_VERSION}/cli-alpine-x64/stable" | jq -r ".url") && \
     curl -sSLf -o /tmp/vscode-cli.tar.gz "${VSCODE_CLI_URL}" && \
     tar -xf /tmp/vscode-cli.tar.gz -C /usr/local/bin && \
