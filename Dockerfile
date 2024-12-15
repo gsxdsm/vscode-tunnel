@@ -10,6 +10,24 @@ RUN apt-get -q update && \
 ARG ROOT_CA_URL=
 RUN test -z "${ROOT_CA_URL}" || (curl -sSLf -O --output-dir /usr/local/share/ca-certificates "${ROOT_CA_URL}" && update-ca-certificates)
 
+# Download and install Docker CLI
+ARG DOCKER_VERSION=5:27.3.1
+RUN curl -sSLf https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu noble stable" > /etc/apt/sources.list.d/docker.list && \
+    apt-get -q update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -q install -y -o Dpkg::Options::="--force-confnew" --no-install-recommends docker-ce-cli=${DOCKER_VERSION}-* docker-buildx-plugin docker-compose-plugin && \
+    rm -rf /var/lib/apt/lists/*
+
+# Download and install Helm
+ARG HELM_VERSION=3.16.3
+RUN curl -sSLf -o /tmp/helm.tar.gz "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" && \
+    tar -xf /tmp/helm.tar.gz -C /usr/local/bin --strip-components=1 linux-amd64/helm && \
+    rm -f /tmp/helm.tar.gz
+
+# Download and install kubectl
+ARG KUBECTL_VERSION=1.31.3
+RUN curl -sSLf -o /usr/local/bin/kubectl "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
+    chmod +x /usr/local/bin/kubectl
 
 # Download and install VS Code CLI
 ARG VSCODE_CLI_VERSION=1.95.3
