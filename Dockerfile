@@ -36,6 +36,9 @@ RUN VSCODE_CLI_URL=$(curl -sSLf "https://update.code.visualstudio.com/api/versio
     tar -xf /tmp/vscode-cli.tar.gz -C /usr/local/bin && \
     rm -f /tmp/vscode-cli.tar.gz
 
+# Install PNPM
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
+
 # Copy files
 COPY entrypoint.sh /entrypoint.sh
 
